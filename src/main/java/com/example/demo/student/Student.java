@@ -2,15 +2,16 @@ package com.example.demo.student;
 
 
 import jdk.jfr.DataAmount;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table
+@Table(name = "Student")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
     @Id
     @SequenceGenerator(
@@ -27,11 +28,11 @@ public class Student {
     private LocalDate dob;
     private Integer age;
 
-    public Student(String name, String email, Integer age, LocalDate dob) {
+    public Student(String name, String email,LocalDate dob, Integer age) {
         this.name = name;
         this.email = email;
-        this.age = age;
         this.dob = dob;
-    }
+        this.age = age;
 
+    }
 }
