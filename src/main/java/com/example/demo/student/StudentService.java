@@ -1,6 +1,7 @@
 package com.example.demo.student;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,14 +19,14 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public void addNewStudent(Student student) {
+    public ResponseEntity<Student> addNewStudent(Student student) {
         Optional<Student> studentOptional = studentRepository
                  .findStudentByEmail(student.getEmail());
         if(studentOptional.isPresent()) {
             throw new IllegalStateException("email is already taken");
         }
         studentRepository.save(student);
-
+        return ResponseEntity.ok(student);
     }
 
     public void deleteStudent(Long studentId) {
@@ -33,11 +34,10 @@ public class StudentService {
         if(!exists){
             throw new IllegalStateException("it doesn´t exist an student with id "+studentId);
         } studentRepository.deleteById(studentId);
-
     }
 
     @Transactional
-    public void updateStudent(Long studentId, String name, String email) {
+    public ResponseEntity<Student> updateStudent(Long studentId, String name, String email) {
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new IllegalStateException("The student doesn't exist"));
         if(name!= null && name.length() >0 && !Objects.equals(student.getName(),name)) {
             student.setName(name);
@@ -50,6 +50,6 @@ public class StudentService {
             student.setEmail(email);
         }
         studentRepository.save(student);
-
+        return ResponseEntity.ok(student);
     }
     }
