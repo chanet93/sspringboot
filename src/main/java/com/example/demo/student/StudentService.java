@@ -15,41 +15,43 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    public List<Student> getStudents(){
+    public List<Student> getStudents() {
         return studentRepository.findAll();
     }
 
-    public ResponseEntity<Student> addNewStudent(Student student) {
+    public Student addNewStudent(Student student) {
         Optional<Student> studentOptional = studentRepository
-                 .findStudentByEmail(student.getEmail());
-        if(studentOptional.isPresent()) {
+                .findStudentByEmail(student.getEmail());
+        if (studentOptional.isPresent()) {
             throw new IllegalStateException("email is already taken");
         }
         studentRepository.save(student);
-        return ResponseEntity.ok(student);
+        return student;
     }
 
-    public void deleteStudent(Long studentId) {
-        boolean exists = studentRepository.existsById(studentId);
-        if(!exists){
-            throw new IllegalStateException("it doesn´t exist an student with id "+studentId);
-        } studentRepository.deleteById(studentId);
+    public Student deleteStudent(Long studentId) {
+        Optional<Student> student = studentRepository.findById(studentId);
+        if (student.isEmpty()) {
+            throw new IllegalStateException("it doesn´t exist an student with id " + studentId);
+        }
+        studentRepository.deleteById(studentId);
+        return student.get();
     }
 
     @Transactional
-    public ResponseEntity<Student> updateStudent(Long studentId, String name, String email) {
+    public Student updateStudent(Long studentId, String name, String email) {
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new IllegalStateException("The student doesn't exist"));
-        if(name!= null && name.length() >0 && !Objects.equals(student.getName(),name)) {
+        if (name != null && name.length() > 0 && !Objects.equals(student.getName(), name)) {
             student.setName(name);
         }
-        if(email!= null && email.length() >0 && !Objects.equals(student.getEmail(),email)) {
+        if (email != null && email.length() > 0 && !Objects.equals(student.getEmail(), email)) {
             Optional<Student> studentOptional = studentRepository.findStudentByEmail(email);
-            if (studentOptional.isPresent()){
+            if (studentOptional.isPresent()) {
                 throw new IllegalStateException("the email is already taken");
             }
             student.setEmail(email);
         }
         studentRepository.save(student);
-        return ResponseEntity.ok(student);
+        return student;
     }
-    }
+}

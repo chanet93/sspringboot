@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,33 +19,35 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @Operation(summary = "Get all products",description = "Get a list of products", tags = "Get")
+    @Operation(summary = "Get all products", description = "Get a list of products", tags = "Get")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",description = "Found the product",
+            @ApiResponse(responseCode = "200", description = "Found the product",
                     content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Student.class))}),
+                            schema = @Schema(implementation = Student.class))}),
             @ApiResponse(responseCode = "404", description = "Products not found",
-            content = @Content)})
-
+                    content = @Content)})
     @GetMapping
-    public List<Student> getStudents(){
-         return studentService.getStudents();
+    public ResponseEntity<List<Student>>getStudents() {
+        return new ResponseEntity<>(studentService.getStudents(), HttpStatus.OK);
     }
 
     @PostMapping
-    public void registerNewStudent(@RequestBody Student student){
+    public ResponseEntity<Student> registerNewStudent(@RequestBody Student student) {
         studentService.addNewStudent(student);
+        return new ResponseEntity<>(student,HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "{studentId}")
-    public void deleteStudentById(@PathVariable("studentId") Long studentId){
-        studentService.deleteStudent(studentId);
+    public ResponseEntity<Student> deleteStudentById(@PathVariable("studentId") Long studentId) {
+        Student student = studentService.deleteStudent(studentId);
+        return (student != null)?ResponseEntity.ok().body(student):ResponseEntity.notFound().build();
     }
 
     @PutMapping(path = "{studentId}")
-    public void updateStudent(@PathVariable("studentId") Long studentId,
+    public ResponseEntity<Student> updateStudent(@PathVariable("studentId") Long studentId,
                               @RequestParam(required = false) String name,
-                              @RequestParam(required = false) String email){
-        studentService.updateStudent(studentId, name, email);
+                              @RequestParam(required = false) String email) {
+        Student student = studentService.updateStudent(studentId, name, email);
+        return ResponseEntity.accepted().body(student);
     }
 }
