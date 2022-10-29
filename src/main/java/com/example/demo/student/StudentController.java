@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,13 +33,13 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> registerNewStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> registerNewStudent(@RequestBody @Valid Student student) {
         studentService.addNewStudent(student);
         return new ResponseEntity<>(student,HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "{studentId}")
-    public ResponseEntity<Student> deleteStudentById(@PathVariable("studentId") Long studentId) {
+    public ResponseEntity<Student> deleteStudentById(@PathVariable(value = "studentId") Long studentId) {
         Student student = studentService.deleteStudent(studentId);
         return (student != null)?ResponseEntity.ok().body(student):ResponseEntity.notFound().build();
     }
@@ -48,6 +49,6 @@ public class StudentController {
                               @RequestParam(required = false) String name,
                               @RequestParam(required = false) String email) {
         Student student = studentService.updateStudent(studentId, name, email);
-        return ResponseEntity.accepted().body(student);
+        return ResponseEntity.ok(student);
     }
 }

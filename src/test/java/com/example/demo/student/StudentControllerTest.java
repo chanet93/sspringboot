@@ -1,5 +1,6 @@
 package com.example.demo.student;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -39,23 +40,24 @@ class StudentControllerTest {
 
     private static final String URL = "/api/v1/student/";
 
+    Student student_1 = new Student(1L, "Raul", "raul@gmail.com", LocalDate.now(), 12);
+    Student student_2 = new Student(1L, "Hope", "hope@gmail.com", LocalDate.now(), 12);
+    Student student_3 = new Student(1L, "Agatha", "agatha@gmail.com", LocalDate.now(), 12);
+
     @Test
     @Order(2)
     void it_should_return_all_students() throws Exception {
-        //given
-      Student student = new Student();
-      student.setDob(LocalDate.now());
-      student.setName("Raul");
-      List<Student> students = Collections.singletonList(student);
 
-      //when
-      Mockito.when(studentService.getStudents()).thenReturn(students);
+        List<Student> students = List.of(student_1, student_2, student_3);
+
+        //when
+       Mockito.when(studentService.getStudents()).thenReturn(students);
 
       //then
         mockMvc.perform(get("/api/v1/student")
               .contentType(APPLICATION_JSON))
               .andExpect(status().isOk())
-              .andExpect(jsonPath("$",hasSize(1)))
+              .andExpect(jsonPath("$",hasSize(3)))
               .andExpect(jsonPath("$[0].name",is("Raul")));
     }
 
@@ -63,34 +65,57 @@ class StudentControllerTest {
     @Order(1)
     void it_should_register_student() throws Exception {
         //given
-        Student student = new Student();
-        student.setName("Hope");
-        student.setEmail("hope@gmail.com");
-        student.setDob(LocalDate.now());
+
         //when
-        Mockito.when(studentService.addNewStudent(student)).thenReturn(student);
+        Mockito.when(studentService.addNewStudent(student_1)).thenReturn(student_1);
 
         //then
         mockMvc.perform(post("/api/v1/student")
-                .contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(student)))
-                .andExpect(status().isCreated());
-
+                .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(student_1)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("name", is(student_1.getName())));
 
     }
 
     @Test
     void it_should_delete_student_with_valid_id() throws Exception {
         //given
-        Student student = new Student();
-        student.setId(1L);
-        student.setName("Hope");
+
         //when
-        Mockito.when(studentService.deleteStudent(1L)).thenReturn(student);
+        Mockito.when(studentService.deleteStudent(student_1.getId())).thenReturn(student_1);
         //then
-        mockMvc.perform(delete(URL + student.getId())
+        mockMvc.perform(delete(URL + student_1.getId())
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("name", is(student.getName())));
+                .andExpect(jsonPath("name", is(student_1.getName())));
+    }
+
+    @Test
+    void it_should_not_delete_student_with_not_valid_id() throws Exception {
+        //given
+
+        //when
+        Mockito.when(studentService.deleteStudent(student_1.getId())).thenReturn(null);
+        //then
+        mockMvc.perform(delete(URL + student_1.getId())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void it_should_update_student_with_valid_id() throws Exception {
+        //given
+        Student student = new Student(1L, "Raul", "hope@gmail.com", LocalDate.now(), 12);
+        //when
+        Mockito.when(studentService.updateStudent(student.getId(), student.getName(), "hope@gmail.com")).thenReturn(student);
+
+        //then
+        mockMvc.perform(put(URL+ student.getId()+"?email=hope@gmail.com")
+                .contentType(APPLICATION_JSON))
+                //.andExpect(jsonPath("email", is(student_1.getEmail())))
+                .andExpect(status().isOk());
     }
 
 }

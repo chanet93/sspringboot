@@ -2,6 +2,7 @@ package com.example.demo.student;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -10,6 +11,7 @@ import java.time.Period;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Student {
     @Id
 //    @SequenceGenerator(
@@ -22,8 +24,11 @@ public class Student {
 //    )
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String name;
+    @NotNull
     private String email;
+    @NotNull
     private LocalDate dob;
     @Transient
     private Integer age;
