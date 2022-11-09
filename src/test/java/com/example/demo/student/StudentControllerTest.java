@@ -2,10 +2,7 @@ package com.example.demo.student;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -105,17 +102,32 @@ class StudentControllerTest {
     }
 
     @Test
+    @DisplayName("JUnit test for updateStudent method")
     void it_should_update_student_with_valid_id() throws Exception {
         //given
         Student student = new Student(1L, "Raul", "hope@gmail.com", LocalDate.now(), 12);
         //when
-        Mockito.when(studentService.updateStudent(student.getId(), student.getName(), "hope@gmail.com")).thenReturn(student);
+        Mockito.when(studentService.updateStudent(student_1.getId(), student_1.getName(), "hope@gmail.com")).thenReturn(student);
 
         //then
         mockMvc.perform(put(URL+ student.getId()+"?email=hope@gmail.com")
                 .contentType(APPLICATION_JSON))
-                //.andExpect(jsonPath("email", is(student_1.getEmail())))
                 .andExpect(status().isOk());
+               // .andExpect(jsonPath("email", is(student.getEmail())));
     }
+
+    @Test
+    void it_should_update_student_with_null_parameters() throws Exception {
+        //when
+        Mockito.when(studentService.updateStudent(student_1.getId(),null, null)).thenReturn(student_1);
+
+        //then
+        mockMvc.perform(put(URL+ student_1.getId())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("email", is(student_1.getEmail())));
+    }
+
+
 
 }
