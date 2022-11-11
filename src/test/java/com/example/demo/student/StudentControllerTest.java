@@ -10,12 +10,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.web.JsonPath;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -108,12 +110,12 @@ class StudentControllerTest {
         Student student = new Student(1L, "Raul", "hope@gmail.com", LocalDate.now(), 12);
         //when
         Mockito.when(studentService.updateStudent(student_1.getId(), student_1.getName(), "hope@gmail.com")).thenReturn(student);
-
         //then
         mockMvc.perform(put(URL+ student.getId()+"?email=hope@gmail.com")
                 .contentType(APPLICATION_JSON))
+                //.andExpect(jsonPath("$",notNullValue()))
                 .andExpect(status().isOk());
-               // .andExpect(jsonPath("email", is(student.getEmail())));
+                //.andExpect(jsonPath("email", is(student.getEmail())));
     }
 
     @Test
@@ -125,8 +127,22 @@ class StudentControllerTest {
         mockMvc.perform(put(URL+ student_1.getId())
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$",notNullValue()))
                 .andExpect(jsonPath("email", is(student_1.getEmail())));
     }
+
+//    @Test
+//    void it_should_update_student_with_not_valid_id() throws Exception {
+//        //when
+//        Mockito.when(studentService.updateStudent(5L,null, null)).thenThrow(IllegalStateException.class);
+//
+//        //then
+//        mockMvc.perform(put(URL+ 5L)
+//                        .contentType(APPLICATION_JSON))
+//                .andExpect(status().is(500))
+//                .andExpect(jsonPath("$",notNullValue()))
+//               ;
+//    }
 
 
 
