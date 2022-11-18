@@ -1,4 +1,5 @@
 package com.example.demo.student;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -6,12 +7,18 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.Period;
 
-@Entity
-@Table(name = "Student")
+@Entity(name = "Student")
+@Table(
+        name = "student",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "student_email_unique", columnNames = "email")
+        })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedQuery(name = "Student.findByEmail",query = "SELECT s FROM Student s WHERE s.email = ?1"
+        )
 public class Student {
     @Id
 //    @SequenceGenerator(
@@ -23,13 +30,36 @@ public class Student {
 //            generator = "student_sequence"
 //    )
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(
+            name = "id",
+            updatable = false
+    )
     private Long id;
-    @NotNull
+
+
+    @Column(
+            name = "name",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String name;
-    @NotNull
+
+
+    @Column(
+            name = "email",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String email;
-    @NotNull
+
+
+    @Column(
+            name = "date_of_birth",
+            nullable = false
+     )
+    //@JsonFormat(pattern = "dd-mm-yyyy")
     private LocalDate dob;
+
     @Transient
     private Integer age;
 

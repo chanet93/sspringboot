@@ -86,4 +86,20 @@ class StudentServiceTest {
                 .hasMessageContaining("The student doesn't exist");
 
     }
+
+    @Test
+    @DisplayName("It must throw an exception with existing email")
+    void it_should_return_error_with_existing_the_email() {
+        //given
+        Student student = new Student(1L, "Raul", EMAIL_TEST, LocalDate.now(), 12);
+
+        Mockito.when(studentRepository.findById(student.getId())).thenReturn(Optional.ofNullable(student_1));
+        Mockito.when(studentRepository.findStudentByEmail(EMAIL_TEST)).thenReturn(Optional.ofNullable(student_1));
+        //then
+
+        assertThatThrownBy(() -> studentService.updateStudent(student.getId(),student.getName(),student.getEmail()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("the email is already taken");
+
+    }
     }
