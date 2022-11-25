@@ -12,13 +12,33 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"name\": \"Agatha\",\n\"email\": \"agatha@gmail.com\",\n\"dob\": \"2023-07-18\"\n}",
+					"raw": "{\n\"name\": \"Maru\",\n\"email\": \"radia@gmail.com\",\n\"dob\": \"2023-07-18\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all students",
+			"request": {
+				"method": "GET",
+				"header": [],
 				"url": {
 					"raw": "localhost:8080/api/v1/student",
 					"host": [
@@ -49,7 +69,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/student/1?name=Hope&email=hope@gmail.com",
+					"raw": "localhost:8080/api/v1/student/1?email=raul@gmail.comssß",
 					"host": [
 						"localhost"
 					],
@@ -62,12 +82,271 @@
 					],
 					"query": [
 						{
-							"key": "name",
-							"value": "Hope"
-						},
+							"key": "email",
+							"value": "raul@gmail.comssß"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find Student By Email",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student/byEmail/raul@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"byEmail",
+						"raul@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find By Name Starts With",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student/startsWith/Ra",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"startsWith",
+						"Ra"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find By Name Ends With",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student/endsWith/ia",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"endsWith",
+						"ia"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find By Name Contains",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student/contains/ar",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"contains",
+						"ar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sorted student by date of brith",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student/sortedDescByDateOfBirth/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"sortedDescByDateOfBirth",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find By Name or Email Starts with Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student/nameOrEmailStartsWith/Ra/mariam@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"nameOrEmailStartsWith",
+						"Ra",
+						"mariam@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Student With Invalid Id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student/1?email=hope1@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"1"
+					],
+					"query": [
 						{
 							"key": "email",
-							"value": "hope@gmail.com"
+							"value": "hope1@gmail.com"
 						}
 					]
 				}
@@ -89,7 +368,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/student/1",
+					"raw": "localhost:8080/api/v1/student/2",
 					"host": [
 						"localhost"
 					],
@@ -98,9 +377,56 @@
 						"api",
 						"v1",
 						"student",
-						"1"
+						"2"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Student ByName",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/student/deleteByName/Raul",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"deleteByName",
+						"Raul"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Documentation API Docs",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "API Documentation Swagger",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}

@@ -1,6 +1,8 @@
 package com.example.demo.student;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -61,5 +63,33 @@ public class StudentService {
 
     public List<Student> findByNameStartsWith(String startName) {
         return studentRepository.findByNameStartsWith(startName);
+    }
+
+    public List<Student> findByNameEndsWith(String endsName) {
+        return studentRepository.findByNameEndsWith(endsName);
+    }
+
+    public List<Student> findByNameContains(String substring) {
+        return studentRepository.findByNameContains(substring);
+    }
+
+    public List<Student> findByNameAndEmailStarts(String name, String email) {
+        return studentRepository.findByNameAndEmailStarts(name, email);
+    }
+
+    public List<Student> sortStudentsByBirth() {
+        return studentRepository.sortStudentsByBirth();
+    }
+
+    public void deleteStudentByName(String name){
+         studentRepository.deleteByName(name);
+    }
+
+    public int updateStudentByName(String newName, String name){
+        return studentRepository.updateByName(newName, name);
+    }
+
+    public Page<Student> findByNameStartsWithPageable(String startName, Pageable page) {
+        return studentRepository.findByNameStartsWithPageable(startName, page);
     }
 }

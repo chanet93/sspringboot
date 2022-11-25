@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +60,12 @@ public class StudentController {
         return (student != null)?ResponseEntity.ok().body(student):ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping(path = "deleteByName/{name}")
+    public void deleteStudentByName(@PathVariable(value = "name") String name) {
+        studentService.deleteStudentByName(name);
+        log.info("deleting student by name {}", name);
+    }
+
     @PutMapping(path = "{studentId}")
     public ResponseEntity<Student> updateStudent(@PathVariable("studentId") Long studentId,
                               @RequestParam(required = false) String name,
@@ -67,10 +75,54 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
+    @PutMapping(path = "updateByName/{newName}/{name}")
+    public ResponseEntity<Object> updateStudentByName(@PathVariable("newName") String newName,
+                                                       @PathVariable("name") String name) {
+      ;
+
+        log.info("updating the student by name {}",name);
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.updateStudentByName(newName, name));
+    }
+
     @GetMapping(path = "startsWith/{startName}")
-    public ResponseEntity<Object> findByNameStartsWith(@PathVariable("startName") String startName){
+    public ResponseEntity<List<Student>> findByNameStartsWith(@PathVariable("startName") String startName){
         List<Student> students = studentService.findByNameStartsWith(startName);
         log.info("student/s that start with {}",startName);
+        return ResponseEntity.status(HttpStatus.OK).body(students);
+    }
+
+    @GetMapping(path = "endsWith/{endsName}")
+    public ResponseEntity<List<Student>> findByNameEndsWith(@PathVariable("endsName") String endsName){
+        List<Student> students = studentService.findByNameEndsWith(endsName);
+        log.info("student/s´s name that ends with {}",endsName);
+        return ResponseEntity.status(HttpStatus.OK).body(students);
+    }
+
+    @GetMapping(path = "contains/{substring}")
+    public ResponseEntity<List<Student>> findByNameContains(@PathVariable("substring") String substring){
+        List<Student> byNameContains = studentService.findByNameContains(substring);
+        log.info("student/s's name or email that starts with {}",substring);
+        return ResponseEntity.status(HttpStatus.OK).body(byNameContains);
+    }
+
+    @GetMapping(path = "nameOrEmailStartsWith/{name}/{email}")
+    public ResponseEntity<List<Student>> findByNameAndEmailStarts(@PathVariable("name") String name, @PathVariable("email") String email){
+        List<Student> byNameAndEmailStarts = studentService.findByNameAndEmailStarts(name, email);
+        log.info("student/s's name or email that starts with {}{}", name, email);
+        return  ResponseEntity.status(HttpStatus.OK).body(byNameAndEmailStarts);
+    }
+
+    @GetMapping(path = "sortedDescByDateOfBirth")
+    public ResponseEntity<List<Student>> sortStudentsByBirth(){
+        List<Student> students = studentService.sortStudentsByBirth();
+        log.info("student/s sorted desc by day of birth");
+        return ResponseEntity.status(HttpStatus.OK).body(students);
+    }
+
+    @GetMapping(path = "startsWithPageable/{startName}")
+    public ResponseEntity<Page<Student>> findByNameStartsWithPageable(@PathVariable("startName") String startName, Pageable page){
+        Page<Student> students = studentService.findByNameStartsWithPageable(startName, page);
+        log.info("student/s that start with {} with a total of pages {}",startName, page);
         return ResponseEntity.status(HttpStatus.OK).body(students);
     }
 
